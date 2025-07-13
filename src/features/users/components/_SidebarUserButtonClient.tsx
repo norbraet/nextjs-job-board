@@ -1,10 +1,11 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { SidebarMenu, SidebarMenuButton } from "@/components/ui/sidebar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { ChevronsUpDown } from "lucide-react"
+import { SignOutButton } from "@clerk/nextjs"
+import { ChevronsUpDown, Link, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react"
 
 type User = {
     name: string, 
@@ -13,7 +14,7 @@ type User = {
 }
 
 export function SidebarUserButtonClient({ user }: { user: User}) {
-    const { isMobile } = useIsMobile()
+    const isMobile  = useIsMobile()
 
     return (
         <DropdownMenu>
@@ -23,7 +24,27 @@ export function SidebarUserButtonClient({ user }: { user: User}) {
                     <ChevronsUpDown className="ml-auto group-data-[state=collapsed]:hidden" />
                 </SidebarMenuButton>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>Hi</DropdownMenuContent>
+            <DropdownMenuContent sideOffset={4} align="end" side={isMobile ? "bottom" : "right"} className="min-w-64 max-w-80">
+                <DropdownMenuLabel className="font-normal p-1">
+                    <UserInfo {...user} />
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => openUserProfile()}>
+                    <UserIcon className="mr-1" />
+                    Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/user-settings/notifications">
+                        <SettingsIcon className="mr-1" /> Settings
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <SignOutButton>
+                    <DropdownMenuItem>
+                        <LogOutIcon className="mr-1" /> Log Out
+                    </DropdownMenuItem>
+                </SignOutButton>
+            </DropdownMenuContent>
         </DropdownMenu>
     )
 }
