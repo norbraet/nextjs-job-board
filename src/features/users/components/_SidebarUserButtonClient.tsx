@@ -72,8 +72,3 @@ function UserInfo(user: User) {
         </div>
     )
 }
-
-
-/* https://www.youtube.com/watch?v=xIfSwINNM40&t=4291s
-1:16:37
- */
