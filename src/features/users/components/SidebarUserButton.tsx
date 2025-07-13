@@ -13,5 +13,7 @@ export function SidebarUserButton() {
 async function SidebarUserSuspense() {
     const { userId } = await auth()
 
-    return <SidebarUserButtonClient user={{ email: "norbi@test.com", name: "Norbert Balaz", imageUrl: "" }} />
+    return (
+        <SidebarUserButtonClient user={{ email: "norbi@test.com", name: "Norbert Balaz", imageUrl: "" }} />
+    )
 }
