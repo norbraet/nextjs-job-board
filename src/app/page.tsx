@@ -1,5 +1,9 @@
-import { Sidebar, SidebarHeader, SidebarProvider, SidebarTrigger, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
+import { Sidebar, SidebarHeader, SidebarProvider, SidebarTrigger, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup } from "@/components/ui/sidebar"
 import { AppSidebarClient } from "@/app/_AppSidebarClient"
+import Link from "next/link"
+import { LogInIcon } from "lucide-react"
+import { SignedIn, SignedOut } from "@/services/clerk/components/SignInStatus"
+import { SidebarUserButton } from "@/features/users/components/SidebarUserButton"
 
 export default function HomePage() {
   return (
@@ -11,17 +15,30 @@ export default function HomePage() {
             <span className="text-xl text-nowrap">Job Portal</span>
           </SidebarHeader>
           <SidebarContent>
-
+            <SidebarGroup>
+              <SidebarMenu>
+                <SignedOut>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/sign-in">
+                          <LogInIcon />
+                          <span>Log In</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SignedOut>
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarContent>
-          <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  asd
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarFooter>
+          <SignedIn>
+            <SidebarFooter>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarUserButton />
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarFooter>
+          </SignedIn>
         </Sidebar>
         <main className="flex-1">
           asdadfa
