@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: 3
+
+silent: true
+
+tasks:
+  install:
+    desc: Install Node.js dependencies
+    dir: '{{.ROOT_DIR}}'
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules/.package-lock.json
+    cmds:
+      - npm ci
+
+  dev:
+    desc: Start Next.js development server
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - install
+    cmds:
+      - npm run dev
+
+  build:
+    desc: Build Next.js application for production
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - install
+    sources:
+      - src/**/*
+      - public/**/*
+      - next.config.ts
+      - tsconfig.json
+      - package.json
+    generates:
+      - .next/**/*
+    cmds:
+      - npm run build
+
+  start:
+    desc: Start Next.js production server
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - build
+    cmds:
+      - npm start
+
+  lint:
+    desc: Run ESLint
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - install
+    cmds:
+      - npm run lint
+
+  lint:fix:
+    desc: Run ESLint with auto-fix
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - install
+    cmds:
+      - npm run lint -- --fix
+
+  type-check:
+    desc: Run TypeScript type checking
+    dir: '{{.ROOT_DIR}}'
+    deps:
+      - install
+    cmds:
+      - npx tsc --noEmit
+
+  clean:
+    desc: Clean Next.js build artifacts
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - rm -rf .next
+      - rm -rf out

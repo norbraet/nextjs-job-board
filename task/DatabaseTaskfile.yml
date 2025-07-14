@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: 3
+
+silent: true
+
+tasks:
+  push:
+    desc: Push database schema changes
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npm run db:push
+
+  generate:
+    desc: Generate database migrations
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npm run db:generate
+
+  migrate:
+    desc: Run database migrations
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npm run db:migrate
+
+  studio:
+    desc: Open Drizzle Studio
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npm run db:studio
+
+  reset:
+    desc: Reset database (WARNING - This will delete all data!)
+    dir: '{{.ROOT_DIR}}'
+    prompt: This will delete all data in your database. Are you sure?
+    cmds:
+      - echo "Resetting database..."
+      - task: push
+      - echo "✅ Database reset complete"
+
+  backup:
+    desc: Create a database backup
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - |
+        BACKUP_FILE="backup_$(date +%Y%m%d_%H%M%S).sql"
+        echo "Creating backup: $BACKUP_FILE"
+        pg_dump $DATABASE_URL > "backups/$BACKUP_FILE"
+        echo "✅ Backup created: backups/$BACKUP_FILE"
+
+  seed:
+    desc: Seed database with sample data
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - |
+        if [ -f "src/drizzle/seed.ts" ]; then
+          npx tsx src/drizzle/seed.ts
+        else
+          echo "No seed file found at src/drizzle/seed.ts"
+        fi

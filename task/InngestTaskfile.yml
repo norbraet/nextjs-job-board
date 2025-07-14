@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: 3
+
+silent: true
+
+tasks:
+  dev:
+    desc: Start Inngest development server
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npm run inngest
+
+  tunnel:
+    desc: Start Inngest tunnel for webhook testing
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - npx inngest-cli dev --url http://localhost:3000/api/inngest --serve-host 0.0.0.0
+
+  status:
+    desc: Check Inngest development server status
+    cmds:
+      - |
+        if pgrep -f "inngest-cli" > /dev/null; then
+          echo "✅ Inngest dev server is running"
+        else
+          echo "❌ Inngest dev server is not running"
+        fi
+
+  stop:
+    desc: Stop Inngest development server
+    cmds:
+      - pkill -f "inngest-cli" || echo "Inngest dev server was not running"

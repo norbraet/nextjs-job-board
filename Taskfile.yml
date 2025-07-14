@@ -1,0 +1,122 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: 3
+
+silent: true
+
+dotenv: [".env.local", ".env"]
+
+env:
+  BROWSER: '{{.DEFAULT_BROWSER | default "Google Chrome"}}'
+
+includes:
+  docker:
+    taskfile: ./task/DockerTaskfile.yml
+    aliases: [d]
+  next:
+    taskfile: ./task/NextTaskfile.yml
+    aliases: [n]
+  inngest:
+    taskfile: ./task/InngestTaskfile.yml
+    aliases: [i]
+  db:
+    taskfile: ./task/DatabaseTaskfile.yml
+
+tasks:
+  default:
+    desc: Start all development services
+    cmds:
+      - task: dev
+
+  dev:
+    desc: Start all development services (Docker, Next.js, Inngest)
+    deps: [docker:up]
+    cmds:
+      - |   
+        npm run dev &
+        npm run inngest &
+        wait
+
+  setup:
+    desc: Initial project setup
+    cmds:
+      - task: next:install
+      - task: docker:up
+      - task: db:push
+      - echo "✅ Project setup complete!"
+
+  build:
+    desc: Build the application for production
+    cmds:
+      - task: next:build
+
+  start:
+    desc: Start production server
+    deps: [build]
+    cmds:
+      - task: next:start
+
+  test:
+    desc: Run tests
+    cmds:
+      - echo "No tests configured yet"
+
+  lint:
+    desc: Run linting
+    cmds:
+      - task: next:lint
+
+  type-check:
+    desc: Run TypeScript type checking
+    cmds:
+      - task: next:type-check
+
+  clean:
+    desc: Clean all build artifacts and stop services
+    cmds:
+      - task: stop
+      - task: next:clean
+      - task: docker:clean
+      - echo "✅ Cleanup complete"
+
+  stop:
+    desc: Stop all running services
+    cmds:
+      - echo "🛑 Stopping all services..."
+      - task: docker:down
+      - task: inngest:stop
+      - pkill -f "next dev" || true
+      - echo "✅ All services stopped"
+
+  restart:
+    desc: Restart all services
+    cmds:
+      - task: stop
+      - task: dev
+
+  status:
+    desc: Check status of all services
+    cmds:
+      - echo "📊 Service Status Report"
+      - echo "========================"
+      - echo ""
+      - echo "🐳 Docker Services:"
+      - task: docker:ps
+      - echo ""
+      - echo "⚡ Next.js (port 3000):"
+      - lsof -i :3000 2>/dev/null | grep LISTEN || echo "Not running"
+      - echo ""
+      - echo "🔄 Inngest:"
+      - task: inngest:status
+
+  logs:
+    desc: Show logs from all services
+    cmds:
+      - task: docker:logs
+
+  update:
+    desc: Update dependencies and database
+    cmds:
+      - task: next:install
+      - task: db:push
+      - echo "✅ Update complete"
