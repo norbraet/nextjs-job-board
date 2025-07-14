@@ -3,10 +3,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { SignOutButton } from "@/services/clerk/components/AuthButtons"
 import { useClerk } from "@clerk/nextjs"
-import { ArrowLeftRightIcon, Building2Icon, ChevronsUpDown, CreditCardIcon, Link, LogOutIcon, SettingsIcon, UserIcon, UserRoundCogIcon } from "lucide-react"
+import { ArrowLeftRightIcon, Building2Icon, ChevronsUpDown, CreditCardIcon, LogOutIcon, SettingsIcon, UserIcon, UserRoundCogIcon } from "lucide-react"
+import Link from "next/link"
 
 type User = {
     email: string
@@ -84,7 +84,7 @@ function OrganizationInfo({ user, organization }: { user: User, organization: Or
                 </AvatarFallback>
             </Avatar>
             <div className="flex flex-col flex-1 min-w-0 leading-tight group-data[state=collapsed]:hidden">
-                <span className="truncate text-sm font-semibold">{user.email}</span>
+                <span className="truncate text-sm font-semibold">{organization.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
             </div>
         </div>

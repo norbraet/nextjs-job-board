@@ -3,10 +3,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton, useSidebar } from "@/components/ui/sidebar"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { SignOutButton } from "@/services/clerk/components/AuthButtons"
 import { useClerk } from "@clerk/nextjs"
-import { ChevronsUpDown, Link, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react"
+import { ChevronsUpDown, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react"
+import Link from "next/link"
 
 type User = {
     name: string, 
