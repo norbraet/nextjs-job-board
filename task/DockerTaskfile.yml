@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: 3
+
+silent: true
+
+tasks:
+  up:
+    desc: Start Docker Compose services
+    internal: true
+    preconditions:
+      - test -f {{.ROOT_DIR}}/docker-compose.yml
+    cmds:
+      - docker-compose up -d {{.CLI_ARGS}}
+
+  down:
+    desc: Stop Docker Compose services
+    internal: true
+    cmds:
+      - docker-compose down {{.CLI_ARGS}}
+
+  restart:
+    desc: Restart Docker Compose services
+    internal: true
+    cmds:
+      - task: down
+      - task: up
+        vars:
+          CLI_ARGS: '{{.CLI_ARGS}}'
+
+  logs:
+    desc: Show Docker Compose logs
+    internal: true
+    cmds:
+      - docker-compose logs -f {{.CLI_ARGS}}
+
+  ps:
+    desc: Show Docker Compose service status
+    internal: true
+    cmds:
+      - docker-compose ps
+
+  clean:
+    desc: Clean up Docker resources
+    internal: true
+    cmds:
+      - docker-compose down -v --remove-orphans {{.CLI_ARGS}}
+
+  pull:
+    desc: Pull latest Docker images
+    internal: true
+    cmds:
+      - docker-compose pull
