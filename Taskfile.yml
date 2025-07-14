@@ -32,9 +32,10 @@ tasks:
     desc: Start all development services (Docker, Next.js, Inngest)
     deps: [docker:up]
     cmds:
-      - |   
-        npm run dev &
-        npm run inngest &
+      - |        
+        task n:dev &
+        task i:dev &
+        task db:studio &
         wait
 
   setup:
