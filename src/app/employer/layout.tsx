@@ -19,7 +19,7 @@ export default function EmployerLayout({ children }: { children: ReactNode }) {
 async function LayoutSuspense({ children }: { children: ReactNode }) {
     const { orgId } = await getCurrentOrganization()
 
-    if (orgId == null) return redirect("/oranizations/select")
+    if (orgId == null) return redirect("/organizations/select")
     
     return (
         <AppSidebar
